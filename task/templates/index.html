@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+{% block content %}
+<h2 class="text-center">Lista de Desejos</h2>
+<hr>
+<div class="container">
+    <form action="{% url 'save_task' %}" class="form-group" method="POST">
+        {% csrf_token %}
+        <input type="text" name="task" id="task" class="form-control">
+        <button type="submit" class="btn btn-success btn-sm" style="margin: 5px auto;">✓</button>
+        <button type="submit" class="btn btn-danger btn-sm" style="margin: 5px auto; width:28px">X</button>
+    </form>
+</div>
+<br>
+<div class="container">
+    {% for task in tasks %}
+        <ul class="list-group">
+            {% if task.completed %}
+                <li class="list-group-item"><s>{{task.description}}</s></li>
+            {% else %}
+                <form action="{% url 'update_task' task.id %}" class="form-group" method="POST">
+                    {% csrf_token %}
+                    <li name="pending" id='pending' class="list-group-item">{{task.description}}</li>
+                    <button type="submit" class="btn btn-success btn-sm" style="margin: 5px auto;">✓</button>
+                </form>            
+            {% endif %}
+        </ul>
+    {% endfor %}
+</div>
+{% endblock %}
